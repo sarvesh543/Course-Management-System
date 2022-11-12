@@ -8,8 +8,9 @@ router.route("/").get([query("userId").isString().not()], async (req, res) => {
     res.status(400).send(errors.errors);
   } else {
     try {
-      const result = await User.findOne({ _id: req.query.userId }).orFail();
-      res.status(200).send({ username: result.username, userId: result._id });
+      const user = await User.findOne({ _id: req.query.userId }).orFail();
+      user.password = "";
+      res.status(200).send(user);
     } catch (e) {
       res.status(404).send("user does not exist");
     }

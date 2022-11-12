@@ -2,9 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const originalState = {
-  username: "",
+  user: false,
   authenticated: false,
-  userId: "",
   loading: false,
   errors: {},
 };
@@ -30,16 +29,14 @@ export const userSlice = createSlice({
       state.loading = false;
     },
     setUser: (state, action) => {
-      state.username = action.payload.username;
+      state.user = action.payload.user;
       state.authenticated = true;
-      state.userId = action.payload.userId;
-      localStorage.setItem("token", state.userId);
+      localStorage.setItem("token", state.user._id);
     },
     logoutUser: (state) => {
       localStorage.removeItem("token");
       state.authenticated = false;
-      state.username = "";
-      state.userId = "";
+      state.user= false;
       state.loading = false;
       state.errors = {};
     },
@@ -55,7 +52,7 @@ export const loginUser = createAsyncThunk(
     try {
       const res = await axios.post("/api/auth/login", payload);
       dispatch(
-        setUser({ username: res.data.username, userId: res.data.userId })
+        setUser({user: res.data})
       );
       // do something after login
     } catch (err) {
@@ -77,9 +74,7 @@ export const signupUser = createAsyncThunk(
     clearTimeout(timeout);
     try {
       const res = await axios.post("/api/auth/signup", payload);
-      dispatch(
-        setUser({ username: res.data.username, userId: res.data.userId })
-      );
+      dispatch(setUser({ user: res.data }));
       // do something after signup
     } catch (err) {
       let errObj = {};
@@ -100,9 +95,7 @@ export const getUser = createAsyncThunk(
     clearTimeout(timeout);
     try {
       const res = await axios.get(`/api/user?userId=${payload}`);
-      dispatch(
-        setUser({ username: res.data.username, userId: res.data.userId })
-      );
+      dispatch(setUser({ user: res.data }));
       // do something after login
     } catch (err) {
       dispatch(logoutUser());
