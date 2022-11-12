@@ -16,7 +16,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const { loading, errors } = useSelector((state) => state.user);
 
-  const [username, setUsername] = useState("");
+  const [rollno, setRollno] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function Login() {
       <Navbar key="lg" bg="dark" variant="dark" expand={"md"} className="mb-3">
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
-           CMS
+            CMS
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${"md"}`} />
           <Navbar.Offcanvas
@@ -59,25 +59,27 @@ export default function Login() {
         <Form
           onSubmit={(e) => {
             e.preventDefault();
-            dispatch(loginUser({ username, password }));
+            dispatch(loginUser({ rollno, password }));
           }}
         >
           <Form.Group className="mb-3">
-            <Form.Label>Username</Form.Label>
+            <Form.Label>Roll No</Form.Label>
             <Form.Control
+              required
               type="text"
-              placeholder="Enter Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter Roll No"
+              value={rollno}
+              onChange={(e) => setRollno(e.target.value)}
             />
             <Form.Text className="text-danger">
-              {errors.username ? errors.username : ""}
+              {errors.rollno ? errors.rollno : ""}
             </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Password</Form.Label>
             <Form.Control
+              required
               type="password"
               placeholder="Password"
               value={password}

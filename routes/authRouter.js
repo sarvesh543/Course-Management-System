@@ -4,20 +4,48 @@ const User = require("../models/User");
 
 router.route("/signup").post(
   [
-    body("username")
+    body("rollno")
       .matches(/^[a-z0-9]+$/gi)
-      .withMessage("Username should not contain special characters")
+      .withMessage("Roll No should not contain special characters")
       .trim()
       .escape()
       .notEmpty()
       .custom(async (value) => {
         try {
-          await User.findOne({ username: value }).orFail();
-          return Promise.reject("username already exists");
+          await User.findOne({ rollno: value }).orFail();
+          return Promise.reject("rollno already exists");
         } catch (e) {
           // do nothing
         }
       }),
+    body("email")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isEmail()
+      .withMessage("Please enter a valid email")
+      .custom(async (value) => {
+        try {
+          await User.findOne({ email: value }).orFail();
+          return Promise.reject("email already exists");
+        } catch (e) {
+          // do nothing
+        }
+      }),
+    body("branch")
+      .trim()
+      .escape()
+      .custom(async (value) => {
+        if (["CSE", "EE", "DSE", "BE", "ME", "CE", "EP"].includes(value)) {
+          // do nothing
+        } else Promise.reject("branch is not valid");
+      }),
+    body("username")
+      .matches(/^[a-z0-9]+$/gi)
+      .withMessage("Username should not contain special characters")
+      .trim()
+      .escape()
+      .notEmpty(),
     body("password")
       .trim()
       .escape()
@@ -38,11 +66,17 @@ router.route("/signup").post(
       res.status(400).send(errors.errors);
     } else {
       try {
-        const result = await User.create({
+        const user = await User.create({
           username: req.body.username,
           password: req.body.password,
+          email: req.body.email,
+          rollno: req.body.rollno,
+          semester: 1,
+          branch: req.body.branch,
+          courses: [],
         });
-        res.status(200).send({ username: result.username, userId: result._id });
+        user.password = "";
+        res.status(200).send(user);
       } catch (e) {
         res.status(400).send([
           {
@@ -59,9 +93,9 @@ router.route("/signup").post(
 
 router.route("/login").post(
   [
-    body("username")
+    body("rollno")
       .matches(/^[a-z0-9]+$/gi)
-      .withMessage("Username should not contain special characters")
+      .withMessage("Roll No should not contain special characters")
       .trim()
       .escape()
       .notEmpty(),
@@ -78,10 +112,14 @@ router.route("/login").post(
     } else {
       try {
         const user = await User.findOne({
-          username: req.body.username,
+          rollno: req.body.rollno,
           password: req.body.password,
         }).orFail();
-        res.status(200).send({ userId: user._id, username: user.username });
+        user.password = ""
+        console.log(user);
+        res
+          .status(200)
+          .send(user);
       } catch (e) {
         res.status(400).send([
           {

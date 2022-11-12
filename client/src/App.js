@@ -10,6 +10,7 @@ import Error from "./pages/Error";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./redux/userActions";
 
+
 function App() {
   const authenticated = useSelector((state) => state.user.authenticated);
   const dispatch = useDispatch();
@@ -17,15 +18,17 @@ function App() {
     dispatch(getUser(localStorage.getItem("token")));
   }, [dispatch]);
 
-  let home = authenticated ? <Home /> : <Welcome />;
-  let login = authenticated ? <Navigate to="/" /> : <Login />;
-  let signup = authenticated ? <Navigate to="/" /> : <SignUp />;
+  let home = authenticated ? <Navigate to="/dashboard" /> : <Welcome />;
+  let login = authenticated ? <Navigate to="/dashboard" /> : <Login />;
+  let signup = authenticated ? <Navigate to="/dashboard" /> : <SignUp />;
+  let dashboard = authenticated ? <Home /> : <Navigate to="/" />;
 
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={home} />
+          <Route exact path="/dashboard" element={dashboard} />
           <Route exact path="/login" element={login} />
           <Route exact path="/signup" element={signup} />
           <Route exact path="*" element={<Error />} />

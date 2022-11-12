@@ -17,6 +17,9 @@ export default function SignUp() {
   const { loading, errors } = useSelector((state) => state.user);
 
   const [username, setUsername] = useState("");
+  const [rollno, setRollno] = useState("");
+  const [branch, setBranch] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -60,12 +63,22 @@ export default function SignUp() {
         <Form
           onSubmit={(e) => {
             e.preventDefault();
-            dispatch(signupUser({ username, password, confirmPassword }));
+            dispatch(
+              signupUser({
+                username,
+                password,
+                confirmPassword,
+                rollno,
+                email,
+                branch,
+              })
+            );
           }}
         >
           <Form.Group className="mb-3">
             <Form.Label>Username</Form.Label>
             <Form.Control
+              required
               type="text"
               placeholder="Enter Username"
               value={username}
@@ -75,10 +88,51 @@ export default function SignUp() {
               {errors.username ? errors.username : ""}
             </Form.Text>
           </Form.Group>
-
+          <Form.Group className="mb-3">
+            <Form.Label>Roll No</Form.Label>
+            <Form.Control
+              required
+              type="text"
+              placeholder="Enter Roll No"
+              value={rollno}
+              onChange={(e) => setRollno(e.target.value)}
+            />
+            <Form.Text className="text-danger">
+              {errors.rollno ? errors.rollno : ""}
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              required
+              placeholder="Enter Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Form.Text className="text-danger">
+              {errors.email ? errors.email : ""}
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Branch</Form.Label>
+            <Form.Select onChange={(e) => setBranch(e.target.value)} required>
+              <option value="CSE">CSE</option>
+              <option value="EE">EE</option>
+              <option value="DSE">DSE</option>
+              <option value="ME">ME</option>
+              <option value="CE">CE</option>
+              <option value="BE">BE</option>
+              <option value="EP">EP</option>
+            </Form.Select>
+            <Form.Text className="text-danger">
+              {errors.branch ? errors.branch : ""}
+            </Form.Text>
+          </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Password</Form.Label>
             <Form.Control
+              required
               type="password"
               placeholder="Password"
               value={password}
@@ -92,6 +146,7 @@ export default function SignUp() {
           <Form.Group className="mb-3">
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control
+              required
               type="password"
               placeholder="Confirm Password"
               value={confirmPassword}
