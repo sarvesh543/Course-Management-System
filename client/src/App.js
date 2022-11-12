@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Welcome from "./pages/Welcome";
 import Error from "./pages/Error";
+import AddDrop from "./pages/AddDrop";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./redux/userActions";
@@ -22,6 +23,7 @@ function App() {
   let login = authenticated ? <Navigate to="/dashboard" /> : <Login />;
   let signup = authenticated ? <Navigate to="/dashboard" /> : <SignUp />;
   let dashboard = authenticated ? <Home /> : <Navigate to="/" />;
+  let addDrop = authenticated ? <AddDrop /> : <Navigate to="/" />;
 
   return (
     <>
@@ -29,6 +31,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={home} />
           <Route exact path="/dashboard" element={dashboard} />
+          <Route exact path="/adddrop" element={addDrop} />
           <Route exact path="/login" element={login} />
           <Route exact path="/signup" element={signup} />
           <Route exact path="*" element={<Error />} />

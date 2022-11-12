@@ -111,15 +111,13 @@ router.route("/login").post(
       res.status(400).send(errors.errors);
     } else {
       try {
+        console.log(req.body);
         const user = await User.findOne({
           rollno: req.body.rollno,
           password: req.body.password,
         }).orFail();
-        user.password = ""
-        console.log(user);
-        res
-          .status(200)
-          .send(user);
+        user.password = "";
+        res.status(200).send(user);
       } catch (e) {
         res.status(400).send([
           {

@@ -10,7 +10,8 @@ const originalState = {
 
 let timeout = undefined;
 
-axios.defaults.baseURL = process.env.REACT_APP_BACKENDURL;
+// TODO: change to actual backend url from env file
+axios.defaults.baseURL = window.origin;
 
 export const userSlice = createSlice({
   name: "user",
@@ -36,7 +37,7 @@ export const userSlice = createSlice({
     logoutUser: (state) => {
       localStorage.removeItem("token");
       state.authenticated = false;
-      state.user= false;
+      state.user = false;
       state.loading = false;
       state.errors = {};
     },
@@ -50,10 +51,9 @@ export const loginUser = createAsyncThunk(
     dispatch(loadingStart());
     clearTimeout(timeout);
     try {
+      console.log(axios.defaults.baseURL)
       const res = await axios.post("/api/auth/login", payload);
-      dispatch(
-        setUser({user: res.data})
-      );
+      dispatch(setUser({ user: res.data }));
       // do something after login
     } catch (err) {
       let errObj = {};
@@ -99,6 +99,35 @@ export const getUser = createAsyncThunk(
       // do something after login
     } catch (err) {
       dispatch(logoutUser());
+      dispatch(loadingStop());
+    }
+  }
+);
+
+export const dropCourses = createAsyncThunk(
+  "user/dropCourses",
+  async (payload, { dispatch, getState }) => {
+    dispatch(loadingStart());
+    clearTimeout(timeout);
+    const { user } = getState().user;
+    try {
+      const dropStaged = payload.map((course) => course.courseCode);
+      const res = await axios.post(`/api/user/dropCourses`, {
+        _id: user._id,
+        todrop: dropStaged,
+      });
+      dispatch(setUser({ user: res.data }));
+      // do something after delete
+    } catch (err) {
+      if (err.response.status === 404) dispatch(logoutUser());
+      else {
+        let errObj = {};
+        err.response.data.forEach((val) => {
+          errObj[val.param] = val.msg;
+        });
+        dispatch(setErrors(errObj));
+        timeout = setTimeout(() => dispatch(clearErrors()), 4000);
+      }
       dispatch(loadingStop());
     }
   }
