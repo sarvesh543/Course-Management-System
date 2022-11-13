@@ -14,12 +14,16 @@ const app = express();
 app.use(express.static(path.join(__dirname, "client", "build")));
 
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: ["http://localhost:3000"],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:3000",
+//       "http://192.168.45.52:3000",
+//       "http://192.168.45.52",
+//     ],
+//     credentials: true,
+//   })
+// );
 app.use(
   express.json({
     verify: (req, res, buf, encoding) => {

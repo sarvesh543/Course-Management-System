@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 //bootstrap
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -6,7 +6,6 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import Loading from "../components/Loading";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, logoutUser } from "../redux/userActions";
@@ -15,7 +14,6 @@ import Course from "../components/Course";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.user);
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -42,6 +40,9 @@ export default function Home() {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
+                <Nav.Link as={Link} to="/adddrop">
+                  Add Drop
+                </Nav.Link>
                 <Nav.Link onClick={() => dispatch(logoutUser())}>
                   Logout
                 </Nav.Link>
@@ -63,7 +64,9 @@ export default function Home() {
         </Card>
         <br />
         <h1 className="py-2">My courses</h1>
-        {user.courses.map((course, index) => <Course key={index} course={course}/>)}
+        {user.courses.map((course, index) => (
+          <Course key={index} course={course} />
+        ))}
       </div>
     </>
   );

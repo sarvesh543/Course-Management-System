@@ -36,7 +36,7 @@ router.route("/signup").post(
       .trim()
       .escape()
       .custom(async (value) => {
-        if (["CSE", "EE", "DSE", "BE", "ME", "CE", "EP"].includes(value)) {
+        if (["CS", "EE", "DSE", "BE", "ME", "CE", "EP"].includes(value)) {
           // do nothing
         } else Promise.reject("branch is not valid");
       }),
@@ -115,11 +115,8 @@ router.route("/login").post(
           rollno: req.body.rollno,
           password: req.body.password,
         }).orFail();
-        user.password = ""
-        console.log(user);
-        res
-          .status(200)
-          .send(user);
+        user.password = "";
+        res.status(200).send(user);
       } catch (e) {
         res.status(400).send([
           {

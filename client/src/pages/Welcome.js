@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 //bootstrap
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
