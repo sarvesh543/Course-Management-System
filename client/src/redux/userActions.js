@@ -5,6 +5,7 @@ const originalState = {
   user: false,
   authenticated: false,
   loading: false,
+  courses: [],
   errors: {},
 };
 
@@ -34,6 +35,9 @@ export const userSlice = createSlice({
       state.authenticated = true;
       localStorage.setItem("token", state.user._id);
     },
+    setCoursesAvailable: (state, action) => {
+      state.courses = action.payload.courses;
+    },
     logoutUser: (state) => {
       localStorage.removeItem("token");
       state.authenticated = false;
@@ -51,7 +55,7 @@ export const loginUser = createAsyncThunk(
     dispatch(loadingStart());
     clearTimeout(timeout);
     try {
-      console.log(axios.defaults.baseURL)
+      console.log(axios.defaults.baseURL);
       const res = await axios.post("/api/auth/login", payload);
       dispatch(setUser({ user: res.data }));
       // do something after login
@@ -104,6 +108,32 @@ export const getUser = createAsyncThunk(
   }
 );
 
+export const getAvailableCourses = createAsyncThunk(
+  "user/getAvailableCourses",
+  async (payload, { dispatch }) => {
+    dispatch(loadingStart());
+    clearTimeout(timeout);
+    try {
+      const res = await axios.get(
+        `/api/user/courseAvailable?userId=${payload}`
+      );
+      dispatch(setCoursesAvailable({ courses: res.data }));
+      // do something after login
+    } catch (err) {
+      if (err.response.status === 404) dispatch(logoutUser());
+      else {
+        let errObj = {};
+        err.response.data.forEach((val) => {
+          errObj[val.param] = val.msg;
+        });
+        dispatch(setErrors(errObj));
+        timeout = setTimeout(() => dispatch(clearErrors()), 4000);
+      }
+      dispatch(loadingStop());
+    }
+  }
+);
+
 export const dropCourses = createAsyncThunk(
   "user/dropCourses",
   async (payload, { dispatch, getState }) => {
@@ -132,6 +162,35 @@ export const dropCourses = createAsyncThunk(
     }
   }
 );
+export const addCourses = createAsyncThunk(
+  "user/addCourses",
+  async (payload, { dispatch, getState }) => {
+    dispatch(loadingStart());
+    clearTimeout(timeout);
+    const { user } = getState().user;
+    try {
+      const staged = payload.map((course) => course.courseCode);
+      const res = await axios.post(`/api/user/addCourses`, {
+        _id: user._id,
+        toadd: staged,
+      });
+      dispatch(setUser({ user: res.data }));
+      console.log("user updated");
+      // do something after delete
+    } catch (err) {
+      if (err.response.status === 404) dispatch(logoutUser());
+      else {
+        let errObj = {};
+        err.response.data.forEach((val) => {
+          errObj[val.param] = val.msg;
+        });
+        dispatch(setErrors(errObj));
+        timeout = setTimeout(() => dispatch(clearErrors()), 4000);
+      }
+      dispatch(loadingStop());
+    }
+  }
+);
 
 export const {
   logoutUser,
@@ -140,6 +199,7 @@ export const {
   loadingStart,
   loadingStop,
   setUser,
+  setCoursesAvailable,
 } = userSlice.actions;
 
 export default userSlice.reducer;

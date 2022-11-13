@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 //bootstrap
 import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/esm/Button";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -8,8 +10,8 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, dropCourses, logoutUser } from "../redux/userActions";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/esm/Button";
+//components
+import CourseList from "../components/CourseList";
 
 export default function AddDrop() {
   const dispatch = useDispatch();
@@ -19,15 +21,14 @@ export default function AddDrop() {
 
   useEffect(() => {
     setDropStaged([]);
-    setCoursesChosen(
-      user.courses
-        .filter((course) => {
-          return course.semester === user.semester;
-        })
-        .map((course) => {
-          return { ...course, selected: false };
-        })
-    );
+    const defaultCourses = user.courses
+      .filter((course) => {
+        return course.semester === user.semester;
+      })
+      .map((course) => {
+        return { ...course, selected: false };
+      });
+    setCoursesChosen(defaultCourses);
   }, [user]);
   useEffect(() => {
     dispatch(clearErrors());
@@ -116,7 +117,18 @@ export default function AddDrop() {
                         <Card.Text className="my-0">
                           Type: {course.typeCourse}
                         </Card.Text>
-                        <Card.Text>Semester: {course.semester}</Card.Text>
+                        <Card.Text className="my-0">
+                          Semester: {course.semester}
+                        </Card.Text>
+                        {course.description && (
+                          <Card.Text
+                            as="a"
+                            href={course.description}
+                            target="_blank"
+                          >
+                            Learn More
+                          </Card.Text>
+                        )}
                       </div>
                       <Button
                         variant="danger"
@@ -185,10 +197,11 @@ export default function AddDrop() {
             </Card>
           </>
         )}
+        <br />
+        <br />
+        <hr />
         <h2 className="py-2">Courses Available</h2>
-        <Button>
-          hello
-        </Button>
+        <CourseList />
       </div>
     </>
   );

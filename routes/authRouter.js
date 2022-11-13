@@ -36,7 +36,7 @@ router.route("/signup").post(
       .trim()
       .escape()
       .custom(async (value) => {
-        if (["CSE", "EE", "DSE", "BE", "ME", "CE", "EP"].includes(value)) {
+        if (["CS", "EE", "DSE", "BE", "ME", "CE", "EP"].includes(value)) {
           // do nothing
         } else Promise.reject("branch is not valid");
       }),
@@ -111,7 +111,6 @@ router.route("/login").post(
       res.status(400).send(errors.errors);
     } else {
       try {
-        console.log(req.body);
         const user = await User.findOne({
           rollno: req.body.rollno,
           password: req.body.password,

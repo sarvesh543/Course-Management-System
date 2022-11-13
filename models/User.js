@@ -1,23 +1,34 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    username: {type: String},
-    password: String,
-    rollno: String,
-    semester: Number,
-    branch: String,
-    email: String,
-    courses: [{
-        courseCode: String,
-        name: String,
-        LTPC: String,
-        credits: Number,
-        typeCourse: String,
-        semester: Number
-    }]
-})
+  username: { type: String },
+  password: String,
+  rollno: String,
+  semester: Number,
+  branch: String,
+  email: String,
+  courses: [
+    {
+      courseCode: String,
+      name: String,
+      description: String,
+      LTPC: String,
+      credits: Number,
+      typeCourse: Number,
+      semester: Number,
+    },
+  ],
+});
 
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
- 
+
+/*
+isme branch ke against values ka matlab
+4 -> free elective
+3 -> discipline elective
+2 -> discipline core
+1 -> institute core
+0 -> not offered
+*/

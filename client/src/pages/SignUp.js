@@ -117,7 +117,7 @@ export default function SignUp() {
           <Form.Group className="mb-3">
             <Form.Label>Branch</Form.Label>
             <Form.Select onChange={(e) => setBranch(e.target.value)} required>
-              <option value="CSE">CSE</option>
+              <option value="CSE">CS</option>
               <option value="EE">EE</option>
               <option value="DSE">DSE</option>
               <option value="ME">ME</option>
