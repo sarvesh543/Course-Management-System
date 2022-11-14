@@ -60,7 +60,7 @@ router.route("/dropCourses").post(
           {
             value: "",
             msg: "There was an error. Please try again later",
-            param: "general",
+            param: "registered",
             location: "body",
           },
         ]);
@@ -94,14 +94,18 @@ router.route("/addCourses").post(
 
         const coursesToAdd = [];
         let creditSum = 0;
-        let registeredCodes = req.user.courses.map(
-          (course) => course.courseCode
-        );
+        let registeredCodes = req.user.courses
+          .filter((value) => {
+            return req.user.semester === value.semester;
+          })
+          .map((course) => course.courseCode);
+
         for (let i = 0; i < req.body.toadd.length; i++) {
           const course = await Course.findOne({
             semester: req.user.semester,
             courseCode: req.body.toadd[i],
           }).orFail();
+
           if (registeredCodes.includes(req.body.toadd[i])) {
             res.status(400).send([
               {
@@ -114,6 +118,7 @@ router.route("/addCourses").post(
             return;
           }
           creditSum += course.credits;
+
           coursesToAdd.push({
             courseCode: course.courseCode,
             name: course.name,
@@ -124,15 +129,19 @@ router.route("/addCourses").post(
             semester: course.semester,
           });
         }
-        creditSum = req.user.courses.reduce((acc, curr) => {
-          return acc + curr.credits;
-        }, creditSum);
+
+        creditSum = req.user.courses
+          .filter((value) => req.user.semester == value.semester)
+          .reduce((acc, curr) => {
+            return acc + curr.credits;
+          }, creditSum);
+
         if (creditSum > 22) {
           res.status(400).send([
             {
               value: "",
               msg: "Maximum registered credits should not exceed 22",
-              param: "general",
+              param: "selected",
               location: "body",
             },
           ]);
@@ -158,7 +167,7 @@ router.route("/addCourses").post(
           {
             value: "",
             msg: "There was an error. Please try again later",
-            param: "general",
+            param: "selected",
             location: "body",
           },
         ]);
@@ -202,7 +211,7 @@ router.route("/courseAvailable").get(
           {
             value: "",
             msg: "There was an error. Please try again later",
-            param: "general",
+            param: "selected",
             location: "body",
           },
         ]);
