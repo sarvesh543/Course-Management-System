@@ -4,10 +4,8 @@ import Spinner from "react-bootstrap/Spinner";
 
 export default function Loading() {
   return (
-    <div className="container w-100 h-100">
-      <Spinner animation="border" role="status">
+      <Spinner animation="border" role="status" className="text-center d-block m-auto p-auto">
         <span className="visually-hidden">Loading...</span>
       </Spinner>
-    </div>
   );
 }

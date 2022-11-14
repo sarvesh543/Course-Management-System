@@ -49,11 +49,12 @@ export const userSlice = createSlice({
 });
 
 // all async actions
+let timeout4 = 0;
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (payload, { dispatch }) => {
     dispatch(loadingStart());
-    clearTimeout(timeout);
+    clearTimeout(timeout4);
     try {
       console.log(axios.defaults.baseURL);
       const res = await axios.post("/api/auth/login", payload);
@@ -65,17 +66,17 @@ export const loginUser = createAsyncThunk(
         errObj[val.param] = val.msg;
       });
       dispatch(setErrors(errObj));
-      timeout = setTimeout(() => dispatch(clearErrors()), 4000);
+      timeout4 = setTimeout(() => dispatch(clearErrors()), 4000);
     }
     dispatch(loadingStop());
   }
 );
-
+let timeout0 = 0;
 export const signupUser = createAsyncThunk(
   "user/signupUser",
   async (payload, { dispatch }) => {
     dispatch(loadingStart());
-    clearTimeout(timeout);
+    clearTimeout(timeout0);
     try {
       const res = await axios.post("/api/auth/signup", payload);
       dispatch(setUser({ user: res.data }));
@@ -86,7 +87,7 @@ export const signupUser = createAsyncThunk(
         errObj[val.param] = val.msg;
       });
       dispatch(setErrors(errObj));
-      timeout = setTimeout(() => dispatch(clearErrors()), 4000);
+      timeout0 = setTimeout(() => dispatch(clearErrors()), 4000);
     }
     dispatch(loadingStop());
   }
@@ -103,16 +104,16 @@ export const getUser = createAsyncThunk(
       // do something after login
     } catch (err) {
       dispatch(logoutUser());
-      dispatch(loadingStop());
     }
+    dispatch(loadingStop());
   }
 );
-
+let timeout1 = 0;
 export const getAvailableCourses = createAsyncThunk(
   "user/getAvailableCourses",
   async (payload, { dispatch }) => {
     dispatch(loadingStart());
-    clearTimeout(timeout);
+    clearTimeout(timeout1);
     try {
       const res = await axios.get(
         `/api/user/courseAvailable?userId=${payload}`
@@ -127,18 +128,18 @@ export const getAvailableCourses = createAsyncThunk(
           errObj[val.param] = val.msg;
         });
         dispatch(setErrors(errObj));
-        timeout = setTimeout(() => dispatch(clearErrors()), 4000);
+        timeout1 = setTimeout(() => dispatch(clearErrors()), 4000);
       }
-      dispatch(loadingStop());
     }
+    dispatch(loadingStop());
   }
 );
-
+let timeout2 = 0;
 export const dropCourses = createAsyncThunk(
   "user/dropCourses",
   async (payload, { dispatch, getState }) => {
     dispatch(loadingStart());
-    clearTimeout(timeout);
+    clearTimeout(timeout2);
     const { user } = getState().user;
     try {
       const dropStaged = payload.map((course) => course.courseCode);
@@ -156,17 +157,18 @@ export const dropCourses = createAsyncThunk(
           errObj[val.param] = val.msg;
         });
         dispatch(setErrors(errObj));
-        timeout = setTimeout(() => dispatch(clearErrors()), 4000);
+        timeout2 = setTimeout(() => dispatch(clearErrors()), 4000);
       }
       dispatch(loadingStop());
     }
   }
 );
+let timeout3 = 0;
 export const addCourses = createAsyncThunk(
   "user/addCourses",
   async (payload, { dispatch, getState }) => {
     dispatch(loadingStart());
-    clearTimeout(timeout);
+    clearTimeout(timeout3);
     const { user } = getState().user;
     try {
       const staged = payload.map((course) => course.courseCode);
@@ -175,7 +177,6 @@ export const addCourses = createAsyncThunk(
         toadd: staged,
       });
       dispatch(setUser({ user: res.data }));
-      console.log("user updated");
       // do something after delete
     } catch (err) {
       if (err.response.status === 404) dispatch(logoutUser());
@@ -185,7 +186,7 @@ export const addCourses = createAsyncThunk(
           errObj[val.param] = val.msg;
         });
         dispatch(setErrors(errObj));
-        timeout = setTimeout(() => dispatch(clearErrors()), 4000);
+        timeout3 = setTimeout(() => dispatch(clearErrors()), 4000);
       }
       dispatch(loadingStop());
     }

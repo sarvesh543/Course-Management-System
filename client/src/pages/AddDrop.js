@@ -191,7 +191,7 @@ export default function AddDrop() {
                   }}
                   className="text-danger pb-1 text-center"
                 >
-                  {errors.general ? errors.general : ""}
+                  {errors.registered ? errors.registered : ""}
                 </Card.Text>
               </Card.Body>
             </Card>
