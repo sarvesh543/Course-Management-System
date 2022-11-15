@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "nodemon index",
     "start": "node index",
-    "heroku-prebuild": "cd client/ && npm install && npm run build && cd.."
+    "heroku-prebuild": "cd client/ && npm install && npm run build"
   },
   "cacheDirectories": [
   "node_modules",
