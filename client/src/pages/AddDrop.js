@@ -9,13 +9,13 @@ import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, dropCourses, logoutUser, getUser } from "../redux/userActions";
+import { clearErrors, dropCourses, logoutUser } from "../redux/userActions";
 //components
 import CourseList from "../components/CourseList";
 
 export default function AddDrop() {
   const dispatch = useDispatch();
-  const { user, errors, registration, loading } = useSelector((state) => state.user);
+  const { user, errors, registration } = useSelector((state) => state.user);
   const [coursesChosen, setCoursesChosen] = useState([]);
   const [dropStaged, setDropStaged] = useState([]);
   
