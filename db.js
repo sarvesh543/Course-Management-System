@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 require("dotenv").config()
 
 //db connections
-mongoose.connect("mongodb://localhost:27017/ADP", {
+mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
