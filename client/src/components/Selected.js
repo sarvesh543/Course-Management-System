@@ -20,6 +20,7 @@ export default function Selected({ custom }) {
     cancelChanges,
     errors,
     totalCredits,
+    setCurrentTab,
   } = custom;
   useEffect(() => {
     dispatch(clearErrors());
@@ -97,32 +98,48 @@ export default function Selected({ custom }) {
                 >
                   Total Credits: {totalCredits}
                 </Card.Text>
-                <Button
-                  className="my-auto mx-1"
-                  style={{
-                    float: "right",
-                    display: "inline-block",
-                  }}
-                  onClick={(e) => cancelChanges(e)}
-                  disabled={staged.length === 0 || loading}
-                >
-                  {loading ? <Loading /> : "Cancel"}
-                </Button>
-                <Button
-                  variant="danger"
-                  className="my-auto mx-1"
-                  style={{
-                    float: "right",
-                    display: "inline-block",
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    dispatch(addCourses(staged));
-                  }}
-                  disabled={staged.length === 0 || loading}
-                >
-                  {loading ? <Loading /> : "Apply"}
-                </Button>
+                {isAdd && (
+                  <Button
+                    className="my-auto mx-1"
+                    style={{
+                      float: "right",
+                      display: "inline-block",
+                    }}
+                    onClick={(e) => setCurrentTab("select")}
+                  >
+                    {loading ? <Loading /> : "View Selected Courses"}
+                  </Button>
+                )}
+                {!isAdd && (
+                  <Button
+                    className="my-auto mx-1"
+                    style={{
+                      float: "right",
+                      display: "inline-block",
+                    }}
+                    onClick={(e) => cancelChanges(e)}
+                    disabled={staged.length === 0 || loading}
+                  >
+                    {loading ? <Loading /> : "Remove All"}
+                  </Button>
+                )}
+                {!isAdd && (
+                  <Button
+                    variant="danger"
+                    className="my-auto mx-1"
+                    style={{
+                      float: "right",
+                      display: "inline-block",
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      dispatch(addCourses(staged));
+                    }}
+                    disabled={staged.length === 0 || loading}
+                  >
+                    {loading ? <Loading /> : "Apply"}
+                  </Button>
+                )}
                 <br />
                 <Card.Text
                   style={{

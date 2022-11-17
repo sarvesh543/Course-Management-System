@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 
+/*
+in this model values against typeCourse mean
+4 -> free elective
+3 -> discipline elective
+2 -> discipline core
+1 -> institute core
+0 -> not offered
+*/
+
 const userSchema = new mongoose.Schema({
   username: { type: String },
   password: String,
@@ -23,12 +32,3 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
-
-/*
-isme branch ke against values ka matlab
-4 -> free elective
-3 -> discipline elective
-2 -> discipline core
-1 -> institute core
-0 -> not offered
-*/

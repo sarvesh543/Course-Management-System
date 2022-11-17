@@ -1,6 +1,6 @@
 {
-  "short_name": "Notery",
-  "name": "Notery App",
+  "short_name": "CMS",
+  "name": "CMS App",
  
   "start_url": ".",
   "display": "standalone",
