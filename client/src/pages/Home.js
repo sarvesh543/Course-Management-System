@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 //bootstrap
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -6,15 +6,20 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import Form from "react-bootstrap/Form";
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, logoutUser } from "../redux/userActions";
+import { clearErrors, logoutUser, getUser } from "../redux/userActions";
 import { Link } from "react-router-dom";
 import Course from "../components/Course";
 
 export default function Home() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    dispatch(getUser(localStorage.getItem("token")));
+  }, [dispatch]);
+  const [semester, setSemester] = useState("all");
 
   useEffect(() => {
     dispatch(clearErrors());
@@ -64,9 +69,35 @@ export default function Home() {
         </Card>
         <br />
         <h1 className="py-2">My courses</h1>
-        {user.courses.map((course, index) => (
-          <Course key={index} course={course} />
-        ))}
+        <Form.Select
+          onChange={(e) => {
+            setSemester(e.target.value);
+          }}
+          value={semester}
+        >
+          <option value={"all"}>All</option>
+          {Array.from({ length: parseInt(user.semester) }, (_, index) => {
+            return (
+              <option key={index} value={index + 1}>
+                {index + 1}
+              </option>
+            );
+          })}
+        </Form.Select>
+        {user.courses
+          ?.filter((course) => {
+            if (semester === "all") return true;
+            else return course.semester === parseInt(semester);
+          })
+          .map((course, index) => (
+            <Course key={index} course={course} />
+          ))}
+        {user.courses?.filter((course) => {
+          if (semester === "all") return true;
+          else return course.semester === parseInt(semester);
+        }).length === 0 && (
+          <h3 className="text-center">Nothing to show here</h3>
+        )}
       </div>
     </>
   );

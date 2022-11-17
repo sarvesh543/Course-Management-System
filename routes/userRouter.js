@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { body, query, validationResult } = require("express-validator");
 const User = require("../models/User");
 const Course = require("../models/Course");
+const AddDrop = require("../models/AddDrop");
 
 router.route("/").get([query("userId").isString().not()], async (req, res) => {
   const errors = validationResult(req);
@@ -29,11 +30,25 @@ router.route("/dropCourses").post(
         // do nothing
       }
     }),
+    body("registration").custom(async (value) => {
+      try {
+        const registration = await AddDrop.findOne().orFail();
+        if (
+          registration.startDate > Date.now() ||
+          registration.endDate < Date.now()
+        ) {
+          await AddDrop.deleteMany({});
+          throw Error("outside registration window");
+        }
+      } catch {
+        return Promise.reject("Course registration is closed");
+      }
+    }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(404).send(errors.errors);
+      res.status(400).send(errors.errors);
     } else {
       try {
         const user = await User.findOneAndUpdate(
@@ -81,11 +96,25 @@ router.route("/addCourses").post(
         // do nothing
       }
     }),
+    body("registration").custom(async (value) => {
+      try {
+        const registration = await AddDrop.findOne().orFail();
+        if (
+          registration.startDate > Date.now() ||
+          registration.endDate < Date.now()
+        ) {
+          await AddDrop.deleteMany({});
+          throw Error("outside registration window");
+        }
+      } catch {
+        return Promise.reject("Course registration is closed");
+      }
+    }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(404).send(errors.errors);
+      res.status(400).send(errors.errors);
     } else {
       try {
         //implement
@@ -187,12 +216,23 @@ router.route("/courseAvailable").get(
         // do nothing
       }
     }),
+    query("registration").custom(async (value)=>{
+      try{
+        const registration = await AddDrop.findOne().orFail();
+        if(registration.startDate > Date.now() || registration.endDate < Date.now()){
+          await AddDrop.deleteMany({});
+          throw Error("outside registration window")
+        }
+      }catch{
+        return Promise.reject("Course registration is closed");
+      }
+    })
     // add validation for if add drop period is active
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(404).send(errors.errors);
+      res.status(400).send(errors.errors);
     } else {
       try {
         const coursesTaken = req.user.courses.map(

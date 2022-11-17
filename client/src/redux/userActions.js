@@ -4,6 +4,7 @@ import axios from "axios";
 const originalState = {
   user: false,
   authenticated: false,
+  registration: true,
   loading: false,
   courses: [],
   errors: {},
@@ -30,9 +31,13 @@ export const userSlice = createSlice({
     loadingStop: (state) => {
       state.loading = false;
     },
+    setRegistration: (state) => {
+      state.registration = false;
+    },
     setUser: (state, action) => {
       state.user = action.payload.user;
       state.authenticated = true;
+      state.registration = true;
       localStorage.setItem("token", state.user._id);
     },
     setCoursesAvailable: (state, action) => {
@@ -121,15 +126,15 @@ export const getAvailableCourses = createAsyncThunk(
       dispatch(setCoursesAvailable({ courses: res.data }));
       // do something after login
     } catch (err) {
-      if (err.response.status === 404) dispatch(logoutUser());
-      else {
-        let errObj = {};
-        err.response.data.forEach((val) => {
-          errObj[val.param] = val.msg;
-        });
-        dispatch(setErrors(errObj));
-        timeout1 = setTimeout(() => dispatch(clearErrors()), 4000);
-      }
+      let errObj = {};
+      err.response.data.forEach((val) => {
+        if (val.param === "registration") dispatch(setRegistration());
+        if (val.param === "_id") dispatch(logoutUser());
+
+        errObj[val.param] = val.msg;
+      });
+      dispatch(setErrors(errObj));
+      timeout1 = setTimeout(() => dispatch(clearErrors()), 4000);
     }
     dispatch(loadingStop());
   }
@@ -150,17 +155,17 @@ export const dropCourses = createAsyncThunk(
       dispatch(setUser({ user: res.data }));
       // do something after delete
     } catch (err) {
-      if (err.response.status === 404) dispatch(logoutUser());
-      else {
-        let errObj = {};
-        err.response.data.forEach((val) => {
-          errObj[val.param] = val.msg;
-        });
-        dispatch(setErrors(errObj));
-        timeout2 = setTimeout(() => dispatch(clearErrors()), 4000);
-      }
-      dispatch(loadingStop());
+      let errObj = {};
+      err.response.data.forEach((val) => {
+        if (val.param === "registration") dispatch(setRegistration());
+        if (val.param === "_id") dispatch(logoutUser());
+
+        errObj[val.param] = val.msg;
+      });
+      dispatch(setErrors(errObj));
+      timeout2 = setTimeout(() => dispatch(clearErrors()), 4000);
     }
+    dispatch(loadingStop());
   }
 );
 let timeout3 = 0;
@@ -179,15 +184,16 @@ export const addCourses = createAsyncThunk(
       dispatch(setUser({ user: res.data }));
       // do something after delete
     } catch (err) {
-      if (err.response.status === 404) dispatch(logoutUser());
-      else {
-        let errObj = {};
-        err.response.data.forEach((val) => {
-          errObj[val.param] = val.msg;
-        });
-        dispatch(setErrors(errObj));
-        timeout3 = setTimeout(() => dispatch(clearErrors()), 4000);
-      }
+      let errObj = {};
+      err.response.data.forEach((val) => {
+        if (val.param === "registration") dispatch(setRegistration());
+        if (val.param === "_id") dispatch(logoutUser());
+
+        errObj[val.param] = val.msg;
+      });
+      dispatch(setErrors(errObj));
+      timeout3 = setTimeout(() => dispatch(clearErrors()), 4000);
+
       dispatch(loadingStop());
     }
   }
@@ -201,6 +207,7 @@ export const {
   loadingStop,
   setUser,
   setCoursesAvailable,
+  setRegistration,
 } = userSlice.actions;
 
 export default userSlice.reducer;

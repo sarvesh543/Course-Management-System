@@ -7,6 +7,7 @@ const User = require("./models/User");
 // routers
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
+const adminRouter = require("./routes/adminRouter");
 
 const app = express();
 
@@ -43,6 +44,9 @@ app.use(express.urlencoded());
 app.use("/api/auth/", authRouter);
 // user routes
 app.use("/api/user/", userRouter);
+//admin routes
+app.use("/api/admin/", adminRouter);
+
 
 // frontend
 app.get("*", (req, res) => {

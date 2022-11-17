@@ -4,15 +4,14 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getAvailableCourses,
-  setUser,
-} from "../redux/userActions";
+import { getAvailableCourses, setUser } from "../redux/userActions";
 import Selected from "./Selected";
 
 export default function CourseList() {
   const dispatch = useDispatch();
-  const { courses, user, errors } = useSelector((state) => state.user);
+  const { courses, user, errors, registration } = useSelector(
+    (state) => state.user
+  );
   const [availableCourses, setAvailableCourses] = useState(courses);
   const [defaultCourses, setDefaultCourses] = useState(courses);
   const [totalCredits, setTotalCredits] = useState(0);
@@ -63,7 +62,7 @@ export default function CourseList() {
   const cancelChanges = (e) => {
     e.preventDefault();
     setStaged([]);
-    dispatch(setUser({ user:{...user} }));
+    dispatch(setUser({ user: { ...user } }));
   };
   const handleStage = (e, id) => {
     e.preventDefault();
@@ -137,7 +136,7 @@ export default function CourseList() {
   }, [user, staged]);
   useEffect(() => {
     dispatch(getAvailableCourses(user._id));
-  }, [user, dispatch]);
+  }, [user]);
 
   return (
     <div className="container">
@@ -163,6 +162,7 @@ export default function CourseList() {
               user: user,
               errors: errors,
               totalCredits: totalCredits,
+              setCurrentTab: setCurrentTab,
             }}
           />
         </Tab>
@@ -177,6 +177,7 @@ export default function CourseList() {
               user: user,
               errors: errors,
               totalCredits: totalCredits,
+              setCurrentTab: setCurrentTab,
             }}
           />
         </Tab>
@@ -191,6 +192,7 @@ export default function CourseList() {
               user: user,
               errors: errors,
               totalCredits: totalCredits,
+              setCurrentTab: setCurrentTab,
             }}
           />
         </Tab>
@@ -205,6 +207,7 @@ export default function CourseList() {
               user: user,
               errors: errors,
               totalCredits: totalCredits,
+              setCurrentTab: setCurrentTab,
             }}
           />
         </Tab>
@@ -219,6 +222,7 @@ export default function CourseList() {
               user: user,
               errors: errors,
               totalCredits: totalCredits,
+              setCurrentTab: setCurrentTab,
             }}
           />
         </Tab>
