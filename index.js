@@ -1,9 +1,6 @@
 const express = require("express");
 require("./db");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
 const path = require("path");
-const User = require("./models/User");
 // routers
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
@@ -14,17 +11,6 @@ const app = express();
 // static
 app.use(express.static(path.join(__dirname, "client", "build")));
 
-app.use(cookieParser());
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:3000",
-//       "http://192.168.45.52:3000",
-//       "http://192.168.45.52",
-//     ],
-//     credentials: true,
-//   })
-// );
 app.use(
   express.json({
     verify: (req, res, buf, encoding) => {
@@ -56,4 +42,5 @@ app.get("*", (req, res) => {
 const port = process.env.PORT || 80;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}!`);
+  console.log("connection to MongoDB...")
 });

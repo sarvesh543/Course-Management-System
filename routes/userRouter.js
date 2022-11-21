@@ -25,7 +25,6 @@ router.route("/dropCourses").post(
       try {
         await User.findOne({ _id: value }).orFail();
       } catch (e) {
-        console.log(value);
         return Promise.reject("user not found");
         // do nothing
       }
@@ -51,6 +50,7 @@ router.route("/dropCourses").post(
       res.status(400).send(errors.errors);
     } else {
       try {
+        // TODO: Add validation to not allow dropping if credits are going below 14
         const user = await User.findOneAndUpdate(
           { _id: req.body._id },
           {
@@ -91,7 +91,6 @@ router.route("/addCourses").post(
         const user = await User.findOne({ _id: value }).orFail();
         req.user = user;
       } catch (e) {
-        console.log(value);
         return Promise.reject("user not found");
         // do nothing
       }
@@ -176,6 +175,7 @@ router.route("/addCourses").post(
           ]);
           return;
         }
+        // TODO: for minimum registered credits to be atleast 14
         // update here
         const user = await User.findOneAndUpdate(
           { _id: req.body._id },

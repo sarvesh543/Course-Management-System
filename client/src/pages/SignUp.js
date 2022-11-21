@@ -30,7 +30,7 @@ export default function SignUp() {
     <>
       <Navbar key="lg" bg="dark" variant="dark" expand={"md"} className="mb-3">
         <Container fluid>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand as={Link} to="/" style={{ fontSize: "31px" }}>
             CMS
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${"md"}`} />

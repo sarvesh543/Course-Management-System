@@ -11,7 +11,6 @@ import AddDrop from "./pages/AddDrop";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./redux/userActions";
 
-
 function App() {
   const authenticated = useSelector((state) => state.user.authenticated);
   const dispatch = useDispatch();

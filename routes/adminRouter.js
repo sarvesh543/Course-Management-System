@@ -45,7 +45,7 @@ router.route("/startAddDrop").get(
               for (let j = 0; j < courses.length; j++) {
                 credits += courses[j].credits;
               }
-              console.log(credits);
+              
               if (credits < 14) {
                 await User.updateOne(
                   { _id: users[i]._id },
