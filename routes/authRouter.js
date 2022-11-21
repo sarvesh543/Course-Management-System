@@ -38,7 +38,7 @@ router.route("/signup").post(
       .custom(async (value) => {
         if (["CS", "EE", "DSE", "BE", "ME", "CE", "EP"].includes(value)) {
           // do nothing
-        } else Promise.reject("branch is not valid");
+        } else return Promise.reject("branch is not valid");
       }),
     body("username")
       .matches(/^[a-z0-9]+$/gi)

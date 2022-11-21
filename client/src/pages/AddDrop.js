@@ -18,7 +18,7 @@ export default function AddDrop() {
   const { user, errors, registration } = useSelector((state) => state.user);
   const [coursesChosen, setCoursesChosen] = useState([]);
   const [dropStaged, setDropStaged] = useState([]);
-  
+
   let numToType = [
     "Not offered",
     "Institute Core",
@@ -66,7 +66,7 @@ export default function AddDrop() {
     <>
       <Navbar key="lg" bg="dark" variant="dark" expand={"md"} className="mb-3">
         <Container fluid>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand as={Link} to="/" style={{ fontSize: "31px" }}>
             CMS
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${"md"}`} />
@@ -103,7 +103,9 @@ export default function AddDrop() {
           {coursesChosen?.length > 0 && (
             <>
               <h2 className="pt-2">Courses Selected for current Semester</h2>
-              <p className="text-danger">Select at least 14 credits before registration closes</p>
+              <p className="text-danger">
+                Select at least 14 credits before registration closes
+              </p>
               <Card className="shadow">
                 <Card.Body>
                   {coursesChosen?.map((course, index) => (

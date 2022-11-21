@@ -11,11 +11,12 @@ import AddDrop from "./pages/AddDrop";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./redux/userActions";
 
-
 function App() {
   const authenticated = useSelector((state) => state.user.authenticated);
   const dispatch = useDispatch();
-
+  useEffect(() => {
+    dispatch(getUser(localStorage.getItem("token")));
+  }, [dispatch]);
 
   let home = authenticated ? <Navigate to="/dashboard" /> : <Welcome />;
   let login = authenticated ? <Navigate to="/dashboard" /> : <Login />;

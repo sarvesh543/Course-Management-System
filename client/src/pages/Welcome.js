@@ -7,12 +7,11 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link } from "react-router-dom";
 
 export default function Welcome() {
-  
   return (
     <>
       <Navbar key="lg" bg="dark" variant="dark" expand={"md"} className="mb-3">
         <Container fluid>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand as={Link} to="/" style={{ fontSize: "31px" }}>
             CMS
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${"md"}`} />
@@ -42,12 +41,27 @@ export default function Welcome() {
           </Navbar.Offcanvas>
         </Container>
       </Navbar>
-      <div className="container item-center">
-        <h1 className="text-center py-4">Welcome to CMS</h1>
-        <hr className="opacity-100" />
-        <p className="text-center">
-          Login <Link to="/login">here</Link> to access CMS
-        </p>
+      <div
+        className="container item-center"
+        style={{
+          position: "absolute",
+          height: "100%",
+          top: "0",
+          minWidth: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: -1,
+        }}
+      >
+        <div>
+          <h1 className="text-center pt-4">Welcome to</h1>
+          <h1 className="text-center pb-4">Course Management System</h1>
+          <hr className="opacity-100" />
+          <h4 className="text-center">
+            Login <Link to="/login">here</Link> to access CMS
+          </h4>
+        </div>
       </div>
     </>
   );

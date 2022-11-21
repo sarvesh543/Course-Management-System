@@ -29,7 +29,7 @@ export default function Home() {
     <>
       <Navbar key="lg" bg="dark" variant="dark" expand={"md"} className="mb-3">
         <Container fluid>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand as={Link} to="/" style={{ fontSize: "31px" }}>
             CMS
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${"md"}`} />
@@ -39,7 +39,10 @@ export default function Home() {
             placement="end"
           >
             <Offcanvas.Header closeButton>
-              <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${"md"}`}>
+              <Offcanvas.Title
+                id={`offcanvasNavbarLabel-expand-${"md"}`}
+                style={{ fontSize: "1px!important" }}
+              >
                 CMS
               </Offcanvas.Title>
             </Offcanvas.Header>
@@ -58,7 +61,9 @@ export default function Home() {
       </Navbar>
 
       <div className="container">
-        <h1 className="py-2">Welcome {user.username}</h1>
+        <h1 className="py-2" style={{ textAlign: "center" }}>
+          Welcome {user.username}!
+        </h1>
         <Card>
           <ListGroup variant="flush">
             <ListGroup.Item>Roll No: {user.rollno}</ListGroup.Item>
@@ -69,6 +74,7 @@ export default function Home() {
         </Card>
         <br />
         <h1 className="py-2">My courses</h1>
+        <h4>Semester</h4>
         <Form.Select
           onChange={(e) => {
             setSemester(e.target.value);

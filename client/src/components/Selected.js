@@ -37,6 +37,18 @@ export default function Selected({ custom }) {
                   ? "No courses in this category"
                   : "Select courses to apply"}
               </h3>
+              {isAdd && (
+                <Button
+                  className="my-auto mx-1"
+                  style={{
+                    float: "right",
+                    display: "inline-block",
+                  }}
+                  onClick={(e) => setCurrentTab("select")}
+                >
+                  {loading ? <Loading /> : "View Selected Courses"}
+                </Button>
+              )}
             </Card.Body>
           </Card>
         )}

@@ -1,5 +1,5 @@
 {
-  "name": "notes",
+  "name": "cms",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "nodemon index",
     "start": "node index",
-    "build": "cd client/ && npm install && npm run build",
+    "build": "npm install && cd client/ && npm install && npm run build",
     "heroku-prebuild": "cd client/ && npm install && npm run build"
   },
   "cacheDirectories": [
