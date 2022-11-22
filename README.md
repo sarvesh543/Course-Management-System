@@ -4,9 +4,11 @@
 * nodejs environment and npm
 * active internet connection for mongodb atlas
 * please ensure you are not using institute proxy as mongodb atlas will not connect
+### To use local mongodb
+* replace "MONGO_URL" in "/Group20_ADP_Project/.env" file 
 
 ## Start the server locally
-* In terminal, go to "ADP" folder and type the following commands in order
+* In terminal, go to "/Group20_ADP_Project" folder and type the following commands in order
 ```
 npm run build
 npm start
