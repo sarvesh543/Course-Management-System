@@ -25,7 +25,7 @@ npm start
 ## Created By
 * B21193 - Sarvesh Jadhav
 * B21163 - Samvaidan Salgotra
-* B21283 - Ayush Gaurav
+* B21183 - Ayush Gaurav
 * B21201 - Mannat Mahajan
 * B21204 - Mayank Mehta
 * B21200 - Manik Aggarwal
