@@ -61,7 +61,6 @@ export const loginUser = createAsyncThunk(
     dispatch(loadingStart());
     clearTimeout(timeout4);
     try {
-      console.log(axios.defaults.baseURL);
       const res = await axios.post("/api/auth/login", payload);
       dispatch(setUser({ user: res.data }));
       // do something after login
