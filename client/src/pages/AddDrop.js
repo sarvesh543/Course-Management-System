@@ -9,7 +9,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, dropCourses, logoutUser } from "../redux/userActions";
+import { clearErrors, dropCourses, getUser, logoutUser } from "../redux/userActions";
 //components
 import CourseList from "../components/CourseList";
 
@@ -26,6 +26,10 @@ export default function AddDrop() {
     "Discipline Elective",
     "Free Elective",
   ];
+
+  useEffect(()=>{
+    dispatch(getUser(localStorage.getItem("token")));
+  },[])
 
   useEffect(() => {
     setDropStaged([]);
@@ -104,7 +108,7 @@ export default function AddDrop() {
             <>
               <h2 className="pt-2">Courses Selected for current Semester</h2>
               <p className="text-danger">
-                Select at least 14 credits before registration closes
+                Select at least 13 credits before registration closes
               </p>
               <Card className="shadow">
                 <Card.Body>

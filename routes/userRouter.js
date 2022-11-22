@@ -21,9 +21,10 @@ router.route("/").get([query("userId").isString().not()], async (req, res) => {
 
 router.route("/dropCourses").post(
   [
-    body("_id").custom(async (value) => {
+    body("_id").custom(async (value, {req}) => {
       try {
-        await User.findOne({ _id: value }).orFail();
+        const user = await User.findOne({ _id: value }).orFail();
+        req.user = user;
       } catch (e) {
         return Promise.reject("user not found");
         // do nothing
@@ -50,7 +51,56 @@ router.route("/dropCourses").post(
       res.status(400).send(errors.errors);
     } else {
       try {
-        // TODO: Add validation to not allow dropping if credits are going below 14
+        // TODO: Add validation to not allow dropping if credits are going below 13
+
+        const coursesToDrop = [];
+        let creditSum = 0;
+        let registeredCodes = req.user.courses
+          .filter((value) => {
+            return req.user.semester === value.semester;
+          })
+          .map((course) => course.courseCode);
+
+        for (let i = 0; i < req.body.todrop.length; i++) {
+          const course = await Course.findOne({
+            semester: req.user.semester,
+            courseCode: req.body.todrop[i],
+          }).orFail();
+
+          if (!registeredCodes.includes(req.body.todrop[i])) {
+            res.status(400).send([
+              {
+                value: "",
+                msg: "Course is not registered",
+                param: "registered",
+                location: "body",
+              },
+            ]);
+            return;
+          }
+          creditSum -= course.credits;
+        }
+
+        creditSum = req.user.courses
+          .filter((value) => req.user.semester == value.semester)
+          .reduce((acc, curr) => {
+            return acc + curr.credits;
+          }, creditSum);
+
+        // error if credits is dropping below 13
+        if (creditSum < 13) {
+          res.status(400).send([
+            {
+              value: "",
+              msg: "Minimum registered credits should be atleast 13",
+              param: "registered",
+              location: "body",
+            },
+          ]);
+          return;
+        }
+
+        // all validation passed
         const user = await User.findOneAndUpdate(
           { _id: req.body._id },
           {
@@ -176,6 +226,17 @@ router.route("/addCourses").post(
           return;
         }
         // TODO: for minimum registered credits to be atleast 14
+        if (creditSum < 13) {
+          res.status(400).send([
+            {
+              value: "",
+              msg: "Minimum registered credits should be 13",
+              param: "selected",
+              location: "body",
+            },
+          ]);
+          return;
+        }
         // update here
         const user = await User.findOneAndUpdate(
           { _id: req.body._id },
