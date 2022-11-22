@@ -1,8 +1,8 @@
-# ADP
+# Course Management System
 
 ## Requirements
 * nodejs environment and npm
-* active internet connection for mongodb
+* active internet connection for mongodb atlas
 * please ensure you are not using institute proxy as mongodb atlas will not connect
 
 ## Start the server locally
@@ -20,7 +20,12 @@ npm start
 ```http://localhost/api/admin/closeAddDrop?password=password```
 * The course registration will automatically close in 15 min if not closed manually.
 
-
-
+## Created By
+* B21193 - Sarvesh Jadhav
+* B21163 - Samvaidan Salgotra
+* B21283 - Ayush Gaurav
+* B21201 - Mannat Mahajan
+* B21204 - Mayank Mehta
+* B21200 - Manik Aggarwal
 
 
