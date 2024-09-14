@@ -1,5 +1,5 @@
 const express = require("express");
-require("./db");
+require("./db.js");
 const path = require("path");
 // routers
 const authRouter = require("./routes/authRouter");
