@@ -15,3 +15,4 @@ db.on("error", () => {
 db.once("open", () => {
   console.log("DB is connected!");
 });
+module.exports = db;

@@ -1,11 +1,10 @@
 const express = require("express");
-require("./db");
 const path = require("path");
 // routers
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const adminRouter = require("./routes/adminRouter");
-
+require("./db.js");
 const app = express();
 
 // static
