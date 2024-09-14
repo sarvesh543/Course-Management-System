@@ -1,4 +1,6 @@
 # Course Management System
+## Live site
+https://course-management-system-hheph3cmeqafacer.centralindia-01.azurewebsites.net/
 
 ## Requirements
 * nodejs environment and npm
